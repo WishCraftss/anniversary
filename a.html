@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>My Valentine 💖</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", system-ui, sans-serif;
+}
+
+body {
+  background: linear-gradient(135deg, #ffd6e8, #ffeaf3);
+  color: #ff4f8b;
+  overflow: hidden;
+}
+
+/* SCREENS */
+.screen {
+  position: absolute;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 20px;
+  animation: fadeIn 0.6s ease;
+}
+
+.screen.active {
+  display: flex;
+}
+
+button {
+  padding: 12px 26px;
+  border-radius: 999px;
+  border: none;
+  background: #ff6fa5;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  margin-top: 16px;
+  box-shadow: 0 10px 20px rgba(255, 111, 165, 0.35);
+}
+
+button:hover {
+  transform: scale(1.08);
+}
+
+/* ENTRY */
+#entry img {
+  width: 160px;
+  cursor: pointer;
+  animation: float 3s ease-in-out infinite;
+}
+
+/* FLIP CARD */
+#photoPage {
+  overflow-y: auto;
+}
+
+.flip-container {
+  perspective: 1000px;
+  max-width: 360px;
+  width: 100%;
+}
+
+.flip-card {
+  width: 100%;
+  height: 420px;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.8s;
+  cursor: pointer;
+}
+
+.flip-card.flipped {
+  transform: rotateY(180deg);
+}
+
+.flip-side {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  background: rgba(255,255,255,0.65);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  box-shadow: 0 15px 30px rgba(255, 111, 165, 0.25);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  text-align: center;
+}
+
+/* FRONT (PHOTO) */
+.flip-front img {
+  width: 100%;
+  max-height: 280px;
+  object-fit: cover;
+  border-radius: 16px;
+}
+
+/* BACK (LETTER) */
+.flip-back {
+  transform: rotateY(180deg);
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+/* GIF ABOVE LETTER */
+.letter-gif {
+  width: 120px;       /* 👈 change size if needed */
+  margin-bottom: 12px;
+  border-radius: 12px;
+}
+
+/* HEARTS */
+.heart {
+  position: absolute;
+  bottom: -20px;
+  font-size: 18px;
+  animation: rise 6s linear infinite;
+  opacity: 0.8;
+}
+
+/* ANIMATIONS */
+@keyframes fadeIn {
+  from { opacity: 0 }
+  to { opacity: 1 }
+}
+
+@keyframes float {
+  0%,100% { transform: translateY(0) }
+  50% { transform: translateY(-12px) }
+}
+
+@keyframes rise {
+  0% { transform: translateY(0); opacity: 1 }
+  100% { transform: translateY(-110vh); opacity: 0 }
+}
+</style>
+</head>
+
+<body>
+
+<div id="hearts"></div>
+
+<!-- 1. ENTRY -->
+<section id="entry" class="screen active">
+  <h1>I have something special for you 🎁</h1>
+  <img src="hug.gif" onclick="openGift()">
+</section>
+
+<!-- 2. INTRO -->
+<section id="intro" class="screen">
+  <h1>Hey you 💕<br>I made this just for you</h1>
+  <img src="gift.gif" width="140">
+  <button onclick="startPhotos()">Next 💖</button>
+</section>
+
+<!-- 3. FLIP CARD PAGE -->
+<section id="photoPage" class="screen">
+  <div class="flip-container">
+    <div class="flip-card" id="flipCard" onclick="flipCard()">
+      <div class="flip-side flip-front">
+        <img id="photoImg">
+      </div>
+      <div class="flip-side flip-back">
+        <!-- 🔽 GIF ADDED HERE -->
+        <img id="letterGif" src="gif1.gif" class="letter-gif">
+        <p id="photoText"></p>
+      </div>
+    </div>
+  </div>
+  <button onclick="nextPhoto()">Next 💕</button>
+</section>
+
+<script>
+const screens = document.querySelectorAll(".screen");
+
+const data = [
+  { img: "WhatsApp Image 2026-02-10 at 18.23.19.jpeg", gif: "dudu-dudu-bubu.gif", text: "Miles apart, hearts locked forever 💞🌍This Valentine’s surprise is for you, my kochuu 🦋❤️The one who lives in my heart every single day 💖💫" },
+  { img: "WhatsApp Image 2026-02-10 at 18.23.26.jpeg", gif: "bubu-heart-sign-for-you-pd8aggu8cikgo4r8.gif", text: "Even when the world feels overwhelming 🌙💭, you remain my calm, kochuu 🤍🕊️Your love reaches me across miles 🌏➡️❤️, wrapping my heart in warmth 🤗💞Without holding my hand 🤝❌, you still make me feel safe 🫶✨—that’s how deeply you live within me 💓" },
+  { img: "WhatsApp Image 2026-02-10 at 18.23.30.jpeg", gif: "bear-hug-kiss-bubu-dudu-pdyvjfqgohc9pk18.gif", text: "Waiting doesn’t feel empty when I’m waiting for you, kochuu ⏳❤️Every passing day brings us closer 🌅💫 to the moment our distance disappears 🛤️💞Until then, my heart walks with yours 👣❤️, dreaming of the day we finally meet again 🌈" },
+  { img: "WhatsApp Image 2026-02-10 at 18.23.41.jpeg", gif: "bubu-bubu-dudu.gif", text: "We don’t need touch to feel connected, kochuu 💌Our hearts speak in silence 🤍💭, in understanding 🤝, in love that doesn’t ask for proof 💖✨What we share is a rare bond 💎❤️ that distance can never weaken 🌍🔒" },
+  { img: "WhatsApp Image 2026-02-10 at 18.23.50.jpeg", gif: "bubu-bubu-dudu.gif", text: "Happy Valentine’s Day, my Kochu ❤️🌹Even though we are far apart 🌏💔, my heart is always with you 💞🫶Every day I miss you a little more 😔❤️, but I also love you a lot more 💖📈Distance can never change what I feel for you 🔐💘You are my today 🌸, my tomorrow 🌅, and my always ♾️" },
+  { img: "WhatsApp Image 2026-02-10 at 18.35.29.jpeg", gif: "9c7e6f79e171791645189e460bbb36f1.gif", text: "I wish I could sit beside you today, hold your hand, and say everything my heart feels. Until then, please know you are deeply, endlessly loved" }
+];
+
+let index = 0;
+const flipCardEl = document.getElementById("flipCard");
+
+function goTo(id) {
+  screens.forEach(s => s.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+}
+
+function openGift() {
+  goTo("intro");
+}
+
+function startPhotos() {
+  index = 0;
+  showCard();
+  goTo("photoPage");
+}
+
+function showCard() {
+  flipCardEl.classList.remove("flipped");
+  photoImg.src = data[index].img;
+  letterGif.src = data[index].gif;   // 👈 GIF CHANGES HERE
+  photoText.innerText = data[index].text;
+}
+
+function flipCard() {
+  flipCardEl.classList.toggle("flipped");
+}
+
+function nextPhoto() {
+  index++;
+  if (index < data.length) {
+    showCard();
+  }
+}
+
+setInterval(() => {
+  const heart = document.createElement("div");
+  heart.className = "heart";
+  heart.innerText = "💗";
+  heart.style.left = Math.random() * 100 + "vw";
+  document.getElementById("hearts").appendChild(heart);
+  setTimeout(() => heart.remove(), 7000);
+}, 500);
+</script>
+
+</body>
+</html>
